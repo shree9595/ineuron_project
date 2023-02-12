@@ -1,0 +1,259 @@
+openapi: "3.0.0"
+info:
+  title: Ineuron Project
+  description: CRUD Operations 
+  version: 1.0.0
+  contact:
+    email: theshree95@gmail.com
+
+
+servers:
+  - url: "{protocol}://{url}/api"
+    description: for local host 
+    variables:
+      version:
+        enum:
+          - v1
+        default: v1
+      url:
+        enum:
+          - localhost:5000
+        default: localhost:5000
+      protocol:
+        enum:
+          - http
+          - https
+        default: http
+
+paths:
+  /user/create:
+    post:
+      tags:
+        - Create User
+      summary: create new user. required parameter are - name, email, password.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - email
+                - password
+              properties:
+                name:
+                  type: string
+                  required: true
+                email:
+                  type: string
+                password:
+                  type: string
+                
+      responses:
+        200:
+          description: All good success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  user:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      email:
+                        type: string
+                      role:
+                        type: string
+                      _id:
+                        type: string
+                      createdAt:
+                        type: string
+        400:
+          description: Bad request
+        500:
+          description: internal server error
+  /user/{email}:
+    get:
+      tags:
+        - Get user by Email
+      summary: get user. required parameter - email.
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        
+      responses:
+        200:
+          description: All good success
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    user:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        email:
+                          type: string
+                        _id:
+                          type: string
+                        createdAt:
+                          type: string
+                  
+        400:
+          description: Bad request
+        500:
+          description: internal server error
+   
+      tags:
+        - Update user by email
+      summary: If user is admin, he can update mentioned fields in user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: name
+          in: formData
+          required: true
+          schema:
+            type: string
+        - name: email
+          in: formData
+          required: true
+          schema:
+            type: string
+        - name: role
+          in: formData
+          required: true
+          schema:
+            type: string
+            enum: [user, admin, manager]
+      requestBody: 
+      responses:
+        200:
+          description: All good success
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    success:
+                      type: boolean
+                  
+        400:
+          description: Bad request
+        500:
+          description: internal server error
+  /user/update/{email}:
+    put:
+      tags:
+        -  Update user by Email
+      summary: update user . Required parameter- email and Update field -name , email 
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - email
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+        
+      responses:
+        200:
+          description: All good success
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    user:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        email:
+                          type: string
+                        _id:
+                          type: string
+                        createdAt:
+                          type: string
+                  
+        400:
+          description: Bad request
+        500:
+          description: internal server error
+   
+      tags:
+        - Admin
+      summary: If user is admin, delete the user with given id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody: 
+      responses:
+        200:
+          description: All good success
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    success:
+                      type: boolean
+                  
+        400:
+          description: Bad request
+        500:
+          description: internal server error
+  /user/delete/{email}:
+    delete:
+        tags:
+          - Delete user by email
+        summary: delete user. required parameter email
+        parameters:
+          - name: email
+            in: path
+            required: true
+            schema:
+              type: string
+        requestBody: 
+        responses:
+          200:
+            description: All good success
+            content:
+              application/json:
+                schema:
+                    type: object
+                    properties:
+                      success:
+                        type: boolean
+                    
+          400:
+            description: Bad request
+          500:
+            description: internal server error
